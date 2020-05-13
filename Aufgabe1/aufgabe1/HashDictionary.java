@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class HashDictionary<K, V> implements Dictionary<K, V> {
 
-    private final int capacity;
+    private int capacity;
     public LinkedList<Entry<K, V>>[] tab;
 
     private static final int m = 31;
@@ -28,6 +28,34 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         return true;
     }
 
+    private void ensureLoadfactor(){
+        int newLoad = 2 * tab.length;
+
+        while(!isPrime(newLoad)){
+            newLoad++;
+        }
+
+        capacity = newLoad;
+        LinkedList<Entry<K, V>>[] tmp = new LinkedList[newLoad];
+
+
+
+        for(int i = 0; i < tab.length; i++){
+            if(tab[i] != null){
+                for(var x : tab[i]){
+                    int adr = hash(x.getKey());
+                    if (tmp[adr] == null) {
+                        tmp[adr] = new LinkedList<>();
+                    }
+                    tmp[adr].add(new Entry<K, V>(x.getKey(), x.getValue()));
+                }
+            }
+        }
+
+        tab = tmp;
+
+    }
+
 
     int hash(K k){
         String key;
@@ -38,11 +66,13 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             adr = 31 * adr + key.charAt(i);
         if (adr < 0)
             adr = -adr;
-        return adr % (tab.length - 1);
+        return adr % capacity;
     }
 
     @Override
     public V insert(K key, V value) {
+
+
 
         int adr = hash(key);
 
@@ -58,11 +88,12 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
 
         if (tab[adr] == null) {
             tab[adr] = new LinkedList<>();
-            tab[adr].add(new Entry<K, V>(key, value));
-        } else {
-            tab[adr].add(new Entry<K, V>(key, value));
         }
-        return null;
+        tab[adr].add(new Entry<K, V>(key, value));
+        if (tab[adr].size() > 2) {
+            ensureLoadfactor();
+        }
+            return null;
     }
 
     @Override
@@ -113,49 +144,27 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     @Override
     public Iterator<Entry<K, V>> iterator() {
 
-        return new Iterator<>() {
+        return new Iterator<Entry<K, V>>() {
 
-            int ia = 0;
-            int il = 0;
-            int mod = 0;
-            int mod2 = 0;
-            int mod3 = 0;
+            int index = -1;
+            Iterator<Entry<K, V>> listIterator;
 
+            @Override
             public boolean hasNext() {
-
-                if(mod == 1)
-                {
-                    il = 0;
-                    ia++;
-                    mod = 0;
-                }
-                if(mod2 == 1){
-                    il++;
-                    mod2 = 0;
-                }
-                if(mod3 == 1){
-                    ia++;
-                    mod3 = 0;
-                }
-
-                while(ia < tab.length)
-                    if(tab[ia] != null) {
-                        if(tab[ia].get(il) == tab[ia].getLast()){
-                            mod = 1;
-                            return true;
-                        }
-                        mod2 = 1;
-                        return true;
-                    } else {
-                        mod3 = 1;
+                if (listIterator != null && listIterator.hasNext())
+                    return true;
+                while (++index < tab.length) {
+                    if (tab[index] != null) {
+                        listIterator = tab[index].iterator();
+                        return listIterator.hasNext();
                     }
+                }
                 return false;
             }
 
             @Override
             public Entry<K, V> next() {
-
-                return tab[ia].get(il);
+                return listIterator.next();
             }
         };
 
