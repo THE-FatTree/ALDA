@@ -1,20 +1,23 @@
 package aufgabe1;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class HashDictionary<K extends Comparable<? super K>, V> implements Dictionary<K, V> {
+public class HashDictionary<K, V> implements Dictionary<K, V> {
 
-    public LinkedList<Entry<K, V>>[] tab;
-    private int size;
     private int capacity;
+    public LinkedList<Entry<K, V>>[] tab;
 
+    private static final int m = 31;
 
-    public HashDictionary(int capacity){
-        this.tab = new LinkedList[capacity];
-        this.capacity = capacity;
-        this.size = 0;
+    public HashDictionary(){
+        capacity = 31;
+        tab = new LinkedList[capacity];
+    }
+
+    public HashDictionary(int n){
+        capacity = n;
+        tab = new LinkedList[capacity];
     }
 
     private static boolean isPrime(int n) {
@@ -25,6 +28,35 @@ public class HashDictionary<K extends Comparable<? super K>, V> implements Dicti
         return true;
     }
 
+    private void ensureLoadfactor(){
+        int newLoad = 2 * tab.length;
+
+        while(!isPrime(newLoad)){
+            newLoad++;
+        }
+
+        capacity = newLoad;
+        LinkedList<Entry<K, V>>[] tmp = new LinkedList[newLoad];
+
+
+
+        for(int i = 0; i < tab.length; i++){
+            if(tab[i] != null){
+                for(var x : tab[i]){
+                    int adr = hash(x.getKey());
+                    if (tmp[adr] == null) {
+                        tmp[adr] = new LinkedList<>();
+                    }
+                    tmp[adr].add(new Entry<K, V>(x.getKey(), x.getValue()));
+                }
+            }
+        }
+
+        tab = tmp;
+
+    }
+
+
     int hash(K k){
         String key;
         if (!(k instanceof String)) key = String.valueOf(k);
@@ -34,41 +66,14 @@ public class HashDictionary<K extends Comparable<? super K>, V> implements Dicti
             adr = 31 * adr + key.charAt(i);
         if (adr < 0)
             adr = -adr;
-        return adr % (tab.length - 1);
-    }
-
-
-    public void ensurecapacity() {
-        if (size + 1 == capacity) {
-
-            int newLoad = 2 * tab.length;
-
-            while (!isPrime(newLoad)) {
-                ++newLoad;
-            }
-
-            HashDictionary<K, V> newDict = new HashDictionary<>(newLoad);
-
-            for (LinkedList<Entry<K, V>> index : tab) {
-                if (index == null) continue;
-                for (Entry<K, V> entry : index) {
-                    newDict.insert(entry.getKey(), entry.getValue());
-                }
-            }
-            tab = new LinkedList[newLoad];
-            capacity = newLoad;
-            for (LinkedList<Entry<K, V>> index : newDict.tab) {
-                if (index == null) continue;
-                for (Entry<K, V> entry : index) {
-                    this.insert(entry.getKey(), entry.getValue());
-                }
-            }
-        }
+        return adr % capacity;
     }
 
     @Override
     public V insert(K key, V value) {
-        ensurecapacity();
+
+
+
         int adr = hash(key);
 
         if (search(key) != null) {
@@ -81,14 +86,12 @@ public class HashDictionary<K extends Comparable<? super K>, V> implements Dicti
             }
         }
 
-
         if (tab[adr] == null) {
             tab[adr] = new LinkedList<>();
-            tab[adr].add(new Entry<K, V>(key, value));
-            ++size;
-        } else {
-            tab[adr].add(new Entry<K, V>(key, value));
-            ++size;
+        }
+        tab[adr].add(new Entry<K, V>(key, value));
+        if (tab[adr].size() > 2) {
+            ensureLoadfactor();
         }
         return null;
     }
@@ -114,11 +117,10 @@ public class HashDictionary<K extends Comparable<? super K>, V> implements Dicti
 
         V tmp;
 
-        for(Entry<K, V> v : tab[adr]){
-            if(v.getKey().equals(key)){
-                tmp = v.getValue();
-                tab[adr].remove(v);
-                size--;
+        for(var x : tab[adr]){
+            if(x.getKey().equals(key)){
+                tmp = x.getValue();
+                tab[adr].remove(x);
                 return tmp;
             }
         }
@@ -128,9 +130,16 @@ public class HashDictionary<K extends Comparable<? super K>, V> implements Dicti
 
     @Override
     public int size() {
+
+        int size = 0;
+
+        for(int i = 0; i < capacity; i++){
+            if(tab[i] != null){
+                size += tab[i].size();
+            }
+        }
         return size;
     }
-
     @Override
     public Iterator<Entry<K, V>> iterator() {
         return new Iterator<Entry<K, V>>() {
