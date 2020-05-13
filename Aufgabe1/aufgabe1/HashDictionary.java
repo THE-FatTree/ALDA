@@ -1,26 +1,26 @@
 package aufgabe1;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class HashDictionary<K, V> implements Dictionary<K, V>, java.lang.Iterable<Dictionary.Entry<K, V>> {
+public class HashDictionary<K, V> implements Dictionary<K, V> {
+
+    private final int capacity;
+    public LinkedList<Entry<K, V>>[] tab;
+
+    private static final int m = 31;
 
     public HashDictionary(){
         capacity = 31;
+        tab = new LinkedList[capacity];
     }
 
     public HashDictionary(int n){
         capacity = n;
+        tab = new LinkedList[capacity];
     }
 
-    private static int capacity;
-
-    private static final int m = 31;
-
-    private LinkedList<Entry<K, V>>[] tab = new LinkedList[31];
-
-    static int hash(String key){
+    int hash(String key){
         int adr = 0;
         for (int i = 0; i < key.length(); i++){
             adr = m * adr + key.charAt(i);
@@ -99,6 +99,51 @@ public class HashDictionary<K, V> implements Dictionary<K, V>, java.lang.Iterabl
     @Override
     public Iterator<Entry<K, V>> iterator() {
 
-        return null;
+        return new Iterator<>() {
+
+            int ia = 0;
+            int il = 0;
+            int mod = 0;
+            int mod2 = 0;
+            int mod3 = 0;
+
+            public boolean hasNext() {
+
+                if(mod == 1)
+                {
+                    il = 0;
+                    ia++;
+                    mod = 0;
+                }
+                if(mod2 == 1){
+                    il++;
+                    mod2 = 0;
+                }
+                if(mod3 == 1){
+                    ia++;
+                    mod3 = 0;
+                }
+
+                while(ia < tab.length)
+                    if(tab[ia] != null) {
+                        if(tab[ia].get(il) == tab[ia].getLast()){
+                            mod = 1;
+                            return true;
+                        }
+                        mod2 = 1;
+                        return true;
+                    } else {
+                        mod3 = 1;
+                    }
+                return false;
+            }
+
+            @Override
+            public Entry<K, V> next() {
+
+                return tab[ia].get(il);
+            }
+        };
+
     }
 }
