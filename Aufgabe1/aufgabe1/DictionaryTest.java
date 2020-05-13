@@ -17,7 +17,7 @@ public class DictionaryTest {
 	 */
 	public static void main(String[] args)  {
 		
-		testSortedArrayDictionary();
+		//testSortedArrayDictionary();
 		testHashDictionary();
 		//testBinaryTreeDictionary();
 	}
@@ -26,12 +26,12 @@ public class DictionaryTest {
 		Dictionary<String, String> dict = new SortedArrayDictionary<>();
 		testDict(dict);
 	}
-	
+
 	private static void testHashDictionary() {
 		Dictionary<String, String> dict = new HashDictionary<>(3);
 		testDict(dict);
 	}
-	
+
 	private static void testBinaryTreeDictionary() {
 		Dictionary<String, String> dict = new BinaryTreeDictionary<>();
 		testDict(dict);
