@@ -20,35 +20,47 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         tab = new LinkedList[capacity];
     }
 
-    int hash(String key){
+    private static boolean isPrime(int n) {
+        for (int i = 2; i * i < n; i++) {
+            if (n % i == 0)
+                return false;
+        }
+        return true;
+    }
+
+
+    int hash(K k){
+        String key;
+        if (!(k instanceof String)) key = String.valueOf(k);
+        else key = (String) k;
         int adr = 0;
-        for (int i = 0; i < key.length(); i++){
-            adr = m * adr + key.charAt(i);
-        }
-        if (adr < 0) {
+        for (int i = 0; i < key.length(); i++)
+            adr = 31 * adr + key.charAt(i);
+        if (adr < 0)
             adr = -adr;
-        }
-        return adr % capacity;
+        return adr % (tab.length - 1);
     }
 
     @Override
     public V insert(K key, V value) {
 
-        int adr = hash(key.toString());
+        int adr = hash(key);
 
-        if(tab[adr] == null){
-            tab[adr] = new LinkedList<>();
-            tab[adr].add(new Entry<>(key, value));
-        } else {
-            if(tab[adr].isEmpty()) {
-                tab[adr].add(new Entry<>(key, value));
-            }
-            for (var x : tab[adr]) {
-                if (x.getKey().equals(key)) {
-                    return x.setValue(value);
+        if (search(key) != null) {
+            for (Entry<K, V> entry : tab[adr]) {
+                if (entry.getKey().equals(key)) {
+                    V val = entry.getValue();
+                    entry.setValue(value);
+                    return val;
                 }
             }
-            tab[adr].add(new Entry<>(key, value));
+        }
+
+        if (tab[adr] == null) {
+            tab[adr] = new LinkedList<>();
+            tab[adr].add(new Entry<K, V>(key, value));
+        } else {
+            tab[adr].add(new Entry<K, V>(key, value));
         }
         return null;
     }
@@ -56,13 +68,13 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     @Override
     public V search(K key) {
 
-        int adr = hash(key.toString());
-
-        for(var x : tab[adr]){
-            if(x.getKey().equals(key)){
-                return x.getValue();
+        int adr = hash(key);
+        if (tab[adr] != null)
+            for(Entry<K, V> v : tab[adr]){
+                if(v.getKey().equals(key)){
+                    return v.getValue();
+                }
             }
-        }
 
         return null;
     }
@@ -70,7 +82,7 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     @Override
     public V remove(K key) {
 
-        int adr = hash(key.toString());
+        int adr = hash(key);
 
         V tmp;
 
@@ -91,7 +103,9 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         int size = 0;
 
         for(int i = 0; i < capacity; i++){
+            if(tab[i] != null){
             size += tab[i].size();
+            }
         }
         return size;
     }
