@@ -72,8 +72,6 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
     @Override
     public V insert(K key, V value) {
 
-
-
         int adr = hash(key);
 
         if (search(key) != null) {
