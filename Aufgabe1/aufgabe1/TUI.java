@@ -13,22 +13,22 @@ public class TUI {
         System.out.println("Welcome to the ricefields motherfucker");
 
         Scanner scanner = new Scanner(System.in);
-        do {
+        while (true) {
             String input = scanner.nextLine();
             commands(input);
-        } while (true);
+        }
     }
 
-    private static void commands(String command) throws Exception {
+    private static void commands(String command) {
 
-        String args[] = command.split(" ");
+        String[] args= command.split(" ");
 
         switch (args[0]) {
             case "create":
                 create(args);
                 break;
             case "read":
-                read();
+                read(Integer.parseInt(args[1]));
                 break;
             case "p":
                 print();
@@ -43,7 +43,7 @@ public class TUI {
                 remove(args);
                 break;
             case "t":
-                test();
+                testruntime(Integer.parseInt(args[1]));
                 break;
             case "exit":
                 System.exit(0);
@@ -88,11 +88,101 @@ public class TUI {
         dic.remove(args[1]);
     }
 
-    private static void read() {
+    private static void read(int n) {
+        int counter = 0;
+        File selectedFile;
+        String line;
+        JFileChooser chooseRead = new JFileChooser();
+        chooseRead.setCurrentDirectory(new File("ALDA"));
+        int rv = chooseRead.showOpenDialog(null);
+        if (rv == JFileChooser.APPROVE_OPTION) {
+            selectedFile = chooseRead.getSelectedFile();
+            System.out.println(selectedFile.getAbsolutePath());
+        } else
+            return;
 
+        FileReader in;
+        long start = 0;
+        long end = 0;
+        try {
+            in = new FileReader(selectedFile);
+            BufferedReader br = new BufferedReader(in);
+            start = System.nanoTime();
+            while ((line = br.readLine()) != null && counter < n) {
+                String[] words = line.split(" ");
+                dic.insert(words[0], words[1]);
+                counter++;
+            }
+            end = System.nanoTime();
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        long res = end - start;
+        System.out.println("Read took " + (res) + "ns");
     }
 
-    private static void test() {
+    private static void testruntime(int n) {
+        int counter = 0;
 
+        File selectedFile;
+        String line;
+        List<String> german = new LinkedList<>();
+        List<String> british = new LinkedList<>();
+
+        JFileChooser chooseTest = new JFileChooser();
+        chooseTest.setCurrentDirectory(new File("ALDA"));
+        int rv = chooseTest.showOpenDialog(null);
+        if (rv == JFileChooser.APPROVE_OPTION) {
+            selectedFile = chooseTest.getSelectedFile();
+            System.out.println(selectedFile.getAbsolutePath());
+        } else
+            return;
+
+        FileReader in;
+        long startG;
+        long endG;
+        long startE;
+        long endE;
+        long timeG = 0;
+        long timeE = 0;
+
+        try {
+            in = new FileReader(selectedFile);
+            BufferedReader br = new BufferedReader(in);
+            while ((line = br.readLine()) != null && counter < n) {
+                String[] words = line.split(" ");
+                german.add(words[0]);
+                british.add(words[1]);
+                dic.insert(words[0], words[1]);
+                counter++;
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ListIterator<String> G = german.listIterator();
+
+        while (G.hasNext()) {
+            startG = System.nanoTime();
+            dic.search(G.next());
+            endG = System.nanoTime();
+            timeG = (endG - startG);
+        }
+
+        System.out.println("Search time for german words: " + (timeG) + "ns");
+
+        ListIterator<String> E = british.listIterator();
+
+        while (E.hasNext()) {
+            startE = System.nanoTime();
+            dic.search(E.next());
+            endE = System.nanoTime();
+            timeE = (endE - startE);
+        }
+
+        System.out.println("Search time for german words: " + (timeE) + "ns");
     }
 }
