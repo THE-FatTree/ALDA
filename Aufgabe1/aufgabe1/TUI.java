@@ -10,7 +10,7 @@ public class TUI {
 
     public static void main (String[] args) throws Exception {
 
-        System.out.println("Welcome to the ricefields motherfucker");
+        System.out.println("Welcome");
 
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -25,7 +25,10 @@ public class TUI {
 
         switch (args[0]) {
             case "create":
-                create(args);
+                if (args.length > 1)
+                    create(args);
+                else
+                    createE(args);
                 break;
             case "read":
                 if(args.length > 1)
@@ -67,6 +70,11 @@ public class TUI {
 
         else
             dic = new SortedArrayDictionary<>();
+    }
+
+    private static void createE(String[] args) {
+        dic = new SortedArrayDictionary<>();
+        System.out.println("Creating new dictionary");
     }
 
     private static void print() {
