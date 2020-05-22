@@ -17,7 +17,7 @@ public class DictionaryTest {
 	 */
 	public static void main(String[] args)  {
 		
-		//testSortedArrayDictionary();
+		testSortedArrayDictionary();
 		testHashDictionary();
 		//testBinaryTreeDictionary();
 	}
@@ -108,6 +108,10 @@ public class DictionaryTest {
 		for (Dictionary.Entry<String, String> e : dict) {
 			System.out.println(e.getKey() + ": " + e.getValue() + " search: " + dict.search(e.getKey()));
 		}
+	}
+
+	private static void TestSpeed() {
+
 	}
 	
 }
