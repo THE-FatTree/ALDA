@@ -169,7 +169,7 @@ public class TUI {
             startG = System.nanoTime();
             dic.search(G.next());
             endG = System.nanoTime();
-            timeG = (endG - startG);
+            timeG += (endG - startG);
         }
 
         System.out.println("Search time for german words: " + (timeG) + "ns");
@@ -180,7 +180,7 @@ public class TUI {
             startE = System.nanoTime();
             dic.search(E.next());
             endE = System.nanoTime();
-            timeE = (endE - startE);
+            timeE += (endE - startE);
         }
 
         System.out.println("Search time for german words: " + (timeE) + "ns");
