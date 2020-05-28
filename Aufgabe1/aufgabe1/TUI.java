@@ -61,7 +61,7 @@ public class TUI {
     }
 
     private static void create(String[] args) {
-        System.out.println("Creating new dictionary");
+        System.out.printf("Creating new %s dictionary\n", args[1]);
         if (args[1].equals("Hash"))
             dic = new HashDictionary<>();
 
@@ -74,7 +74,7 @@ public class TUI {
 
     private static void createE(String[] args) {
         dic = new SortedArrayDictionary<>();
-        System.out.println("Creating new dictionary");
+        System.out.println("Creating new Sorted Array dictionary");
     }
 
     private static void print() {
@@ -108,8 +108,7 @@ public class TUI {
         String line;
         JFileChooser chooseRead = new JFileChooser();
         chooseRead.setCurrentDirectory(new File("ALDA"));
-        int rv = chooseRead.showOpenDialog(null);
-        if (rv == JFileChooser.APPROVE_OPTION) {
+        if (chooseRead.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
             selectedFile = chooseRead.getSelectedFile();
             System.out.println(selectedFile.getAbsolutePath());
         } else

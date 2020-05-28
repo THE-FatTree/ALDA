@@ -201,21 +201,23 @@ public class BinaryTreeDictionary<K extends Comparable<? super  K>, V> implement
             p.key = min.key;
             p.value = min.value;
         }
+        p = balance(p);
         return p;
     }
 
-    private Node<K,V> getRemMinR(Node<K,V> p, MinEntry<K,V> min) {
+    private Node<K, V> getRemMinR(Node<K, V> p, MinEntry<K, V> min) {
         assert p != null;
-        if (p.left == null) { min.key = p.key;
+        if (p.left == null) {
+            min.key = p.key;
             min.value = p.value;
             p = p.right;
-        }
-        else{
+        } else {
             p.left = getRemMinR(p.left, min);
-            if(p.left != null)
+            if (p.left != null)
                 p.left.parent = p;
         }
-            return p;
+        p = balance(p);
+        return p;
     }
 
 

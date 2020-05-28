@@ -6,6 +6,7 @@ import java.util.LinkedList;
 public class HashDictionary<K, V> implements Dictionary<K, V> {
 
     private int capacity;
+    private int size = 0;
     public LinkedList<Entry<K, V>>[] tab;
 
     private static final int m = 31;
@@ -88,9 +89,10 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             tab[adr] = new LinkedList<>();
         }
         tab[adr].add(new Entry<K, V>(key, value));
-        if (tab[adr].size() > 2) {
+        if ((size / tab.length) > 2) {
             ensureLoadfactor();
         }
+        size++;
         return null;
     }
 
@@ -119,10 +121,10 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
             if(x.getKey().equals(key)){
                 tmp = x.getValue();
                 tab[adr].remove(x);
+                size--;
                 return tmp;
             }
         }
-
         return null;
     }
 
