@@ -110,8 +110,4 @@ public class DictionaryTest {
 		}
 	}
 
-	private static void TestSpeed() {
-
-	}
-	
 }

@@ -90,7 +90,9 @@ public class HashDictionary<K, V> implements Dictionary<K, V> {
         tab[adr].add(new Entry<K, V>(key, value));
         if (tab[adr].size() > 2) {
             ensureLoadfactor();
+
         }
+        size++;
         return null;
     }
 
