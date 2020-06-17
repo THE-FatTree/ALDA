@@ -3,9 +3,7 @@
 
 package aufgabe2;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Klasse zur Erstellung einer topologischen Sortierung.
@@ -22,8 +20,32 @@ public class TopologicalSort<V> {
 	 * @param g gerichteter Graph.
 	 */
 	public TopologicalSort(DirectedGraph<V> g) {
-        // ...
+		topSort(g);
     }
+
+    public List<V> topSort(DirectedGraph<V> g) {
+		Map<V, Integer> inDeg = new TreeMap<>();
+		Queue<V> q = new LinkedList<>();
+
+		for (V v : g.getVertexSet()) {
+			inDeg.put(v, g.getInDegree(v));
+			if (inDeg.get(v) == 0)
+				q.add(v);
+		}
+		while(!q.isEmpty()) {
+			V v = q.remove();
+			ts.add(v);
+			for (V w : g.getSuccessorVertexSet(v)) {
+				inDeg.put(w, inDeg.get(w) - 1);
+				if (inDeg.get(w) == 0)
+					q.add(w);
+			}
+		}
+		if (ts.size() != g.getNumberOfVertexes())
+			return null;
+		else
+			return ts;
+	}
     
 	/**
 	 * Liefert eine nicht modifizierbare Liste (unmodifiable view) zurück,
@@ -51,5 +73,26 @@ public class TopologicalSort<V> {
 		if (ts.topologicalSortedList() != null) {
 			System.out.println(ts.topologicalSortedList()); // [1, 2, 3, 4, 5, 6, 7]
 		}
+
+		DirectedGraph<String> g2 = new AdjacencyListDirectedGraph<>();
+		g2.addEdge("Unterhose", "Hose");
+		g2.addEdge("Hose", "Guertel");
+		g2.addEdge("Hose", "Schuhe");
+		g2.addEdge("Socken", "Schuhe");
+		g2.addEdge("Schuhe", "Handschuhe");
+		g2.addEdge("Unterhemd", "Hemd");
+		g2.addEdge("Hemd", "Pulli");
+		g2.addEdge("Pulli", "Mantel");
+		g2.addEdge("Guertel", "Mantel");
+		g2.addEdge("Mantel", "Schal");
+		g2.addEdge("Schal", "Handschuhe");
+		g2.addEdge("Muetze", "Handschuhe");
+		System.out.println(g2);
+
+		TopologicalSort<String> ts2 = new TopologicalSort<>(g2);
+		if (ts2.topologicalSortedList() != null) {
+			System.out.println(ts2.topologicalSortedList());
+		}
+
 	}
 }
