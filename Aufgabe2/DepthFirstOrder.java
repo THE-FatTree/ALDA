@@ -28,38 +28,6 @@ public class DepthFirstOrder<V> {
      *
      * @param g gerichteter Graph.
      */
-
-    public DepthFirstOrder(DirectedGraph<V> g, List<V> list) {
-        myGraph = g;
-        //Startobjekte erzeugen.
-        b = new LinkedList<>(list);
-        //System.out.println(b);
-        /*Für jedes Objekt dass noch nicht in der BesucherListe
-        visitDF ausführen. Also 1 , danach 3 */
-
-        for (V v : b) {
-            if (!besucht.contains(v)) {
-
-                numberOfDFTrees++;
-                Set<V> c = new HashSet<>();
-                visitDFAllNodes(v, myGraph,c);
-                comp.put(numberOfDFTrees,c);
-            }
-        }
-    }
-
-    void visitDFAllNodes(V v, DirectedGraph<V> g, Set<V> visited) {
-        besucht.add(v);
-        visited.add(v);
-
-        for (var e : g.getSuccessorVertexSet(v)) {
-            if (!besucht.contains(e)) {
-                visitDFAllNodes(e, g, visited);
-            }
-        }
-    }
-
-
     public DepthFirstOrder(DirectedGraph<V> g) {
         myGraph = g;
 
@@ -72,19 +40,8 @@ public class DepthFirstOrder<V> {
         for (int i = 0; i < b.size() - 1; i++) {
             if (!besucht.contains(b.get(i))) {
                 numberOfDFTrees++;
-                visitDF(b.get(i), g);
+                visitDF(b.get(i), g, besucht);
             }
-        }
-    }
-
-    void visitDF(V v, DirectedGraph<V> g){
-
-        if(!besucht.contains(v)) {
-
-            visitDF(v, g, besucht);
-
-        }else {
-            besucht.clear();
         }
     }
 
@@ -101,6 +58,36 @@ public class DepthFirstOrder<V> {
             }
         }
         postOrder.add(v);
+    }
+
+    // ********* Strong Components ************ //
+    public DepthFirstOrder(DirectedGraph<V> g, List<V> list) {
+        myGraph = g;
+        //Startobjekte erzeugen.
+        b = new LinkedList<>(list);
+        //System.out.println(b);
+        /*Für jedes Objekt dass noch nicht in der BesucherListe
+        visitDF ausführen. Also 1 , danach 3 */
+
+        for (V v : b) {
+            if (!besucht.contains(v)) {
+                Set<V> visits = new HashSet<>();
+                visitDFAllNodes(v, myGraph, visits);
+                comp.put(numberOfDFTrees,visits);
+                numberOfDFTrees++;
+            }
+        }
+    }
+
+    void visitDFAllNodes(V v, DirectedGraph<V> g, Set<V> visited) {
+        besucht.add(v);
+        visited.add(v);
+
+        for (var e : g.getSuccessorVertexSet(v)) {
+            if (!besucht.contains(e)) {
+                visitDFAllNodes(e, g, visited);
+            }
+        }
     }
 
     /**
