@@ -188,7 +188,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 
 		Set<Integer> s = g.getSuccessorVertexSet(2);
 		System.out.println(s);
-		s.remove(5);	// Laufzeitfehler! Warum?
+		//s.remove(5);	// Laufzeitfehler! Warum?
 		/* Weil dies nur eine Sicht auf eine Menge von Nachfolgerknoten ist. Die Set ist unveränderlich (final)
 		 * und referenziert nur die Instanz. Die add und remove Methode führt deshalb zu einer
 		 * UnsupportedOperationException.
