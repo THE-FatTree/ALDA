@@ -60,40 +60,6 @@ public class DepthFirstOrder<V> {
         postOrder.add(v);
     }
 
-    // ********* Strong Components ************ //
-    public DepthFirstOrder(DirectedGraph<V> g, List<V> list) {
-        myGraph = g;
-        //Startobjekte erzeugen.
-        b = new LinkedList<>(list);
-        //System.out.println(b);
-        /*Für jedes Objekt dass noch nicht in der BesucherListe
-        visitDF ausführen. Also 1 , danach 3 */
-
-        for (V v : b) {
-            if (!besucht.contains(v)) {
-                Set<V> visits = new HashSet<>();
-                visitDFAllNodes(v, myGraph, visits);
-                comp.put(numberOfDFTrees,visits);
-                numberOfDFTrees++;
-            }
-        }
-    }
-
-    void visitDFAllNodes(V v, DirectedGraph<V> g, Set<V> visited) {
-        besucht.add(v);
-        visited.add(v);
-
-        for (var e : g.getSuccessorVertexSet(v)) {
-            if (!besucht.contains(e)) {
-                visitDFAllNodes(e, g, visited);
-            }
-        }
-    }
-
-    public Map<Integer,Set<V>> comp(){
-        return comp;
-    }
-
     /**
      * Liefert eine nicht modifizierbare Liste (unmodifiable view) mit einer
      * Pre-Order-Reihenfolge zurück.

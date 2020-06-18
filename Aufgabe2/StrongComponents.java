@@ -28,6 +28,10 @@ public class StrongComponents<V extends Comparable>{
 	private List<V> postOrderSC;
 	private final DirectedGraph<V> myGraph;
 	private final DirectedGraph<V> invertedGraph;
+	private int numberOfDFTrees = 0;
+
+	Set<V> besucht = new TreeSet<>();
+
 	/**
 	 * Ermittelt alle strengen Komponenten mit
 	 * dem Kosaraju-Sharir Algorithmus.
@@ -45,10 +49,39 @@ public class StrongComponents<V extends Comparable>{
 		invertedGraph = myGraph.invert();
 
 		// c)
-		scmp = new DepthFirstOrder<>(invertedGraph,postOrderSC);
-		comp.putAll(scmp.comp());
+		visitAllNodes(invertedGraph,postOrderSC);
+
 	}
-	
+
+	void visitAllNodes(DirectedGraph<V> g, List<V> list) {
+		//Startobjekte erzeugen.
+		List<V> b = new LinkedList<>(list);
+
+		for (V v : b) {
+			if (!besucht.contains(v)) {
+				Set<V> visits = new HashSet<>();
+				visitDFAllNodes(v, g, visits);
+				comp.put(numberOfDFTrees,visits);
+				numberOfDFTrees++;
+			}
+		}
+	}
+
+	void visitDFAllNodes(V v, DirectedGraph<V> g, Set<V> visited) {
+		besucht.add(v);
+		visited.add(v);
+
+		for (var e : g.getSuccessorVertexSet(v)) {
+			if (!besucht.contains(e)) {
+				visitDFAllNodes(e, g, visited);
+			}
+		}
+	}
+
+	public Map<Integer,Set<V>> comp(){
+		return comp;
+	}
+
 	/**
 	 * 
 	 * @return Anzahl der strengen Komponeneten.
