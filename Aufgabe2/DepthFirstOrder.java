@@ -90,6 +90,10 @@ public class DepthFirstOrder<V> {
         }
     }
 
+    public Map<Integer,Set<V>> comp(){
+        return comp;
+    }
+
     /**
      * Liefert eine nicht modifizierbare Liste (unmodifiable view) mit einer
      * Pre-Order-Reihenfolge zurück.
@@ -108,10 +112,6 @@ public class DepthFirstOrder<V> {
      */
     public List<V> postOrder() {
         return Collections.unmodifiableList(postOrder);
-    }
-
-    public Map<Integer,Set<V>> comp(){
-        return comp;
     }
 
     /**
