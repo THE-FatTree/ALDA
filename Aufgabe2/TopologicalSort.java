@@ -13,36 +13,37 @@ public class TopologicalSort<V> {
     private List<V> ts = new LinkedList<>(); // topologisch sortierte Folge
 	// ...
 
-	Map<V,Integer> inDegree; // Anzahl noch nicht besuchter Vorgänger
-	Queue<V> q;
-
 	/**
 	 * Führt eine topologische Sortierung für g durch.
 	 * @param g gerichteter Graph.
 	 */
 	public TopologicalSort(DirectedGraph<V> g) {
-		//...
-		inDegree = new TreeMap<>();
-		q = new ArrayDeque<>();
-		V v;
-		for (var e : g.getVertexSet()) {
-			inDegree.put(e, g.getInDegree(e));
-			if (inDegree.get(e) == 0) {
-				q.add(e);
-			}
-		}
+		topSort(g);
+	}
 
-		while(!q.isEmpty()){
-			v = q.remove();
+	public List<V> topSort(DirectedGraph<V> g) {
+
+		Map<V, Integer> inDeg = new TreeMap<>();
+		Queue<V> q = new LinkedList<>();
+
+		for (V v : g.getVertexSet()) {
+			inDeg.put(v, g.getInDegree(v));
+			if (inDeg.get(v) == 0)
+				q.add(v);
+		}
+		while(!q.isEmpty()) {
+			V v = q.remove();
 			ts.add(v);
-			for(var e : g.getSuccessorVertexSet(v)){
-				inDegree.put(e,inDegree.get(e)-1);
-				if(inDegree.get(e)  == 0){
-					q.add(e);
-				}
+			for (V w : g.getSuccessorVertexSet(v)) {
+				inDeg.put(w, inDeg.get(w) - 1);
+				if (inDeg.get(w) == 0)
+					q.add(w);
 			}
 		}
-
+		if (ts.size() != g.getNumberOfVertexes())
+			return null;
+		else
+			return ts;
 	}
 
 	/**
