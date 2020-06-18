@@ -43,8 +43,6 @@ public class TopologicalSort<V> {
 			}
 		}
 
-		g.getNumberOfVertexes();
-
 	}
 
 	/**
