@@ -100,11 +100,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 	 */
     @Override
     public boolean containsVertex(V v) {
-		if(pred.containsKey(v) && succ.containsKey(v)){
-			return true;
-		}else{
-			return false;
-		}
+		return pred.containsKey(v) && succ.containsKey(v);
     }
 
 	/**
@@ -115,11 +111,7 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 	 */
     @Override
     public boolean containsEdge(V v, V w) {
-    	if(pred.get(v).containsKey(w) && succ.get(w).containsKey(v)){
-    		return true;
-		}else{
-    		return false;
-		}
+		return pred.get(v).containsKey(w) && succ.get(w).containsKey(v);
     }
 
 	/**

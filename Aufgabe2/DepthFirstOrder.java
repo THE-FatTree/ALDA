@@ -32,7 +32,7 @@ public class DepthFirstOrder<V> {
     public DepthFirstOrder(DirectedGraph<V> g, List<V> list) {
         myGraph = g;
         //Startobjekte erzeugen.
-        b = new LinkedList<V>(list);
+        b = new LinkedList<>(list);
         //System.out.println(b);
         /*Für jedes Objekt dass noch nicht in der BesucherListe
         visitDF ausführen. Also 1 , danach 3 */
@@ -42,19 +42,19 @@ public class DepthFirstOrder<V> {
 
                 numberOfDFTrees++;
                 Set<V> c = new HashSet<>();
-                visitDFInvert(v, myGraph,c);
+                visitDFAllNodes(v, myGraph,c);
                 comp.put(numberOfDFTrees,c);
             }
         }
     }
 
-    void visitDFInvert(V v, DirectedGraph<V> g, Set<V> visited) {
+    void visitDFAllNodes(V v, DirectedGraph<V> g, Set<V> visited) {
         besucht.add(v);
         visited.add(v);
 
         for (var e : g.getSuccessorVertexSet(v)) {
             if (!besucht.contains(e)) {
-                visitDFInvert(e, g, visited);
+                visitDFAllNodes(e, g, visited);
             }
         }
     }

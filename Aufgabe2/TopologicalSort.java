@@ -43,11 +43,9 @@ public class TopologicalSort<V> {
 			}
 		}
 
-		if(ts.size() != g.getNumberOfVertexes()) {
-			return;
-		}
+		g.getNumberOfVertexes();
 
-    }
+	}
 
 	/**
 	 * Liefert eine nicht modifizierbare Liste (unmodifiable view) zurück,
@@ -84,6 +82,9 @@ public class TopologicalSort<V> {
 		w.addEdge("Hemd","Pulli");
 		w.addEdge("Schal","Handschuhe");
 		w.addEdge("Mütze","Handschuhe");
+
+
+
 		System.out.println(w);
 
 		TopologicalSort<Integer> ts = new TopologicalSort<>(g);
@@ -93,11 +94,16 @@ public class TopologicalSort<V> {
 			System.out.println(ts.topologicalSortedList()); // [1, 2, 3, 4, 5, 6, 7]
 		}
 
-		if(ws.topologicalSortedList()!=null){
+		if(ws.topologicalSortedList()!= null){
 			System.out.println(ws.topologicalSortedList());
 		}
 
-
+		// Hose darf nur mit einem Schal angezogen werden
+		w.addEdge("Schal", "Hose");
+		TopologicalSort<String> ws2 = new TopologicalSort<>(w);
+		if(ws.topologicalSortedList()!= null){
+			System.out.println(ws2.topologicalSortedList());
+		}
 
 	}
 }

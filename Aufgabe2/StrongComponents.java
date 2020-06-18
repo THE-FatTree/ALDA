@@ -35,13 +35,16 @@ public class StrongComponents<V extends Comparable>{
 	 */
 	public StrongComponents(DirectedGraph<V> g) {
 
+		// a)
 		myGraph = g;
 		dfs = new DepthFirstOrder<V>(myGraph);
 		postOrderSC = new ArrayList<V>(dfs.postOrder());
 		Collections.reverse(postOrderSC);
 
-
+		// b)
 		invertedGraph = myGraph.invert();
+
+		// c)
 		scmp = new DepthFirstOrder<>(invertedGraph,postOrderSC);
 		comp.putAll(scmp.comp());
 	}

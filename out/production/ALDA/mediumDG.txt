@@ -1,5 +1,5 @@
-Anzahl Knoten = 50
-Anzahl Kanten = 136 
+50
+147
  0  7
  0 34
  1 14
