@@ -61,10 +61,15 @@ public class AdjacencyListDirectedGraph<V> implements DirectedGraph<V> {
 		addVertex(v);
 		addVertex(w);
 
-		pred.get(v).put(w,weight);
-		succ.get(w).put(v,weight);
-		numberEdge++;
-		return true;
+		if (!containsEdge(v, w)) {
+			succ.get(v).put(w, weight);
+			pred.get(w).put(v, weight);
+			numberEdge++;
+			return true;
+		}
+
+		succ.get(v).put(w, weight);
+		return false;
     }
 
 	/**
