@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 
 /**
@@ -108,6 +109,8 @@ public class ScotlandYard {
         ShortestPath<Integer> sySp = new ShortestPath<Integer>(syGraph, syHeuristic);
 
         sySp.searchShortestPath(65, 157);
+        System.out.println(sySp.getShortestPath().toString());
+
         System.out.println("Distance = " + sySp.getDistance()); // 9.0
 
         sySp.searchShortestPath(1, 175);
@@ -147,7 +150,6 @@ public class ScotlandYard {
 
         sim.stopSequence();
 
-
     }
 
 }
@@ -166,12 +168,23 @@ class ScotlandYardHeuristic implements Heuristic<Integer> {
     }
 
     public ScotlandYardHeuristic() throws FileNotFoundException {
-        // ...
+        Scanner in = new Scanner(new File("Aufgabe3/shortestPath/ScotlandYard_Knoten.txt"));
+        coord = new TreeMap<>();
+
+        while (in.hasNextInt()) {
+            int p = in.nextInt();
+            int x = in.nextInt();
+            int y = in.nextInt();
+            coord.put(p, new Point(x, y));
+        }
     }
 
     public double estimatedCost(Integer u, Integer v) {
-        // ...
-        return 0.0;
+
+        Point vp = coord.get(u);
+        Point wp = coord.get(v);
+
+        return Math.sqrt((vp.x-wp.x)*(vp.x-wp.x) + (vp.y-wp.y)*(vp.y-wp.y)) / 30;
     }
 }
 

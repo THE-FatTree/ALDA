@@ -24,8 +24,11 @@ public class ShortestPath<V> {
     Map<V, Double> dist; // Distanz für jeden Knoten
     Map<V, V> pred; // Vorgänger für jeden Knoten
 
-    DirectedGraph<V> graph;
+    V start;
+    V ziel;
 
+    DirectedGraph<V> graph;
+    Heuristic<V> heuristic;
     /**
      * Konstruiert ein Objekt, das im Graph g k&uuml;rzeste Wege
      * nach dem A*-Verfahren berechnen kann.
@@ -39,6 +42,9 @@ public class ShortestPath<V> {
      */
     public ShortestPath(DirectedGraph<V> g, Heuristic<V> h) {
         graph = g;
+        heuristic = h;
+        dist = new TreeMap<>();
+        pred = new TreeMap<>();
     }
 
     /**
@@ -69,23 +75,57 @@ public class ShortestPath<V> {
      */
     public void searchShortestPath(V s, V g) {
         // ...
-        Set<V> kl = new TreeSet<>();
+        start = s;
+        ziel = g;
+
         for (var v : graph.getVertexSet()) {
-            dist.put(v, null);
+            dist.put(v, Double.POSITIVE_INFINITY);
             pred.put(v, null);
         }
+
+        LinkedList<V> kl = new LinkedList<>();
+        dist.replace(s, 0.0);
         kl.add(s);
-        // UNDER CONSTRUCTION *************************************
+
         while (!kl.isEmpty()) {
-            for (var adj : kl) {
-                if(adj instanceof DirectedGraph) {
-                    if (dist.get(adj) == null) {
-                        kl.add(adj);
+            V v = null;
+            double min = Double.POSITIVE_INFINITY;
+            if(heuristic == null) { // DIJKSTRA
+                for (var m : kl) {
+                    if (min > dist.get(m)) {
+                        min = dist.get(m);
+                        v = m;
+                    }
+                }
+            } else {                // A*
+                for (var m : kl) {
+                    if (min > dist.get(m) + heuristic.estimatedCost(m, g)) {
+                        min = dist.get(m) + heuristic.estimatedCost(m, g);
+                        v = m;
                     }
                 }
             }
-        }
+            kl.remove(v);
 
+            if(sim != null){
+                sim.visitStation((int) v);
+            }
+
+            assert v != null;
+            if(v.equals(g)) {
+                return;
+            }
+
+            for(var w : graph.getSuccessorVertexSet(v)){
+                if(dist.get(w) == Double.POSITIVE_INFINITY) {
+                    kl.add(w);
+                }
+                if(dist.get(v) + graph.getWeight(v, w) < dist.get(w)){
+                    pred.put(w, v);
+                    dist.put(w, dist.get(v) + graph.getWeight(v, w));
+                }
+            }
+        }
     }
 
     /**
@@ -96,8 +136,15 @@ public class ShortestPath<V> {
      * @throws IllegalArgumentException falls kein kürzester Weg berechnet wurde.
      */
     public List<V> getShortestPath() {
-        // ...
-        return null;
+        List<V> order = new LinkedList<>();
+        order.add(ziel);
+        V tmp = ziel;
+        while(!tmp.equals(start)){
+            tmp = pred.get(tmp);
+            order.add(tmp);
+        }
+        Collections.reverse(order);
+        return order;
     }
 
     /**
@@ -108,8 +155,8 @@ public class ShortestPath<V> {
      * @throws IllegalArgumentException falls kein kürzester Weg berechnet wurde.
      */
     public double getDistance() {
-        // ...
-        return 0.0;
+
+        return dist.get(ziel);
     }
 
 }
