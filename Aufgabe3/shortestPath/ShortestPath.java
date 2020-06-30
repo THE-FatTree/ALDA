@@ -7,6 +7,7 @@ package shortestPath;
 import shortestPath.Aufgabe2.*;
 import sim.SYSimulation;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 // ...
@@ -23,7 +24,8 @@ public class ShortestPath<V> {
 	
 	Map<V,Double> dist; // Distanz für jeden Knoten
 	Map<V,V> pred; // Vorgänger für jeden Knoten
-	// ...
+
+	DirectedGraph<V> graph;
 
 	/**
 	 * Konstruiert ein Objekt, das im Graph g k&uuml;rzeste Wege 
@@ -36,7 +38,7 @@ public class ShortestPath<V> {
 	 * dem Dijkstra-Verfahren gesucht.
 	 */
 	public ShortestPath(DirectedGraph<V> g, Heuristic<V> h) {
-		// ...
+		graph = g;
 	}
 
 	/**
@@ -65,6 +67,23 @@ public class ShortestPath<V> {
 	 */
 	public void searchShortestPath(V s, V g) {
 		// ...
+		List<V> kl = new LinkedList<>();
+		for(var v : graph.getVertexSet()){
+			dist.put(v, null);
+			pred.put(v, null);
+		}
+		kl.add(s);
+
+
+		// UNDER CONSTRUCTION *************************************
+		while(!kl.isEmpty()) {
+			for(var adj : kl){
+				if(dist.get(adj) == null){
+					kl.add(adj);
+				}
+			}
+		}
+
 	}
 
 	/**
