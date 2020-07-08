@@ -7,6 +7,7 @@ package shortestPath;
 import shortestPath.Aufgabe2.*;
 import sim.SYSimulation;
 
+import java.sql.SQLOutput;
 import java.util.*;
 // ...
 
@@ -105,6 +106,7 @@ public class ShortestPath<V> {
                     }
                 }
             }
+            System.out.println(v);
             kl.remove(v);
 
             if(sim != null){
