@@ -90,10 +90,10 @@ public class TelNet {
             double y = v.ende.y;
             StdDraw.line(v.anfang.x, v.anfang.y, x, y);
             StdDraw.line(x, y, v.ende.x, v.ende.y);
-            StdDraw.setPenColor(Color.BLUE);
+            StdDraw.setPenColor(Color.GREEN);
             StdDraw.filledSquare(v.anfang.x, v.anfang.y, 0.5);
             StdDraw.filledSquare(v.ende.x, v.ende.y, 0.5);
-            StdDraw.setPenColor(Color.RED);
+            StdDraw.setPenColor(Color.YELLOW);
         }
         StdDraw.show(0);
     }
@@ -115,6 +115,7 @@ public class TelNet {
     }
 
     public static void main(String[] args) {
+        /*
         TelNet tn = new TelNet(5);
         tn.addTelKnoten(1, 1);
         tn.addTelKnoten(3, 1);
@@ -126,7 +127,8 @@ public class TelNet {
         System.out.println(tn.computeOptTelNet());
         System.out.println(tn.getOptTelNetKosten());
         tn.drawOptTelNet(7, 7);
-        /*
+        */
+
         int max = 1000;
         TelNet tn2 = new TelNet(100);
 
@@ -135,6 +137,6 @@ public class TelNet {
         System.out.println(tn2.computeOptTelNet());
 
         tn2.drawOptTelNet(max, max);
-         */
+
     }
 }
