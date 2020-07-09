@@ -86,12 +86,15 @@ public class UnionFind {
         test.union(3, 5);
         System.out.println("Union(3, 5)");
         test.prettyPrint();
+        System.out.println("Menge an Partitionen: " + test.size());
         test.union(0, 5);
         System.out.println("Union(0, 5)");
         test.prettyPrint();
+        System.out.println("Menge an Partitionen: " + test.size());
         test.union(0, 6);
         System.out.println("Untion(0, 6)");
         test.prettyPrint();
+
         System.out.println();
         System.out.println("Menge an Partitionen: " + test.size());
 
