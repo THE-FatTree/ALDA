@@ -57,11 +57,7 @@ public class TelNet {
             }
         }
 
-        if (telVerbindungen.isEmpty() && forest.size() != 1) {
-            return false;
-        } else {
-            return true;
-        }
+        return !telVerbindungen.isEmpty() || forest.size() == 1;
     }
 
     // Zeichnet das gefundene optimale Telefonnetz mit der Größe xMax*yMax in ein Fenster.
@@ -90,7 +86,6 @@ public class TelNet {
     public void generateRandomTelNet(int n, int xMax, int yMax) {
         Random rand = new Random();
         for (int i = 0; i < n; i++) {
-
             int rand_int1 = rand.nextInt(xMax);
             int rand_int2 = rand.nextInt(yMax);
             addTelKnoten(rand_int1, rand_int2);
