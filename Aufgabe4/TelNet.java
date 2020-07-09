@@ -26,18 +26,18 @@ public class TelNet {
     // Berechnet ein optimales Telefonnetz als minimal aufspannenden Baum mit dem Algorithmus von Kruskal.
     public boolean computeOptTelNet() {
         UnionFind forest = new UnionFind(knoten.size());
-        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>(Comparator.comparing(x -> x.c));
+        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>(knoten.size(), Comparator.comparing(x -> x.c));
         optTelNet = new LinkedList<>();
 
         // Füge Telefonverbindung hinzu, falls kosten <= lgb
-        for (var a : knoten.keySet()) {
-            for (var e : knoten.keySet()) {
+        for (var a : knoten.entrySet()) {
+            for (var e : knoten.entrySet()) {
                 if (a.equals(e)) {
                     continue;
                 }
-                int kosten = Math.abs(a.x - e.x) + Math.abs(a.y - e.y);
+                int kosten = Math.abs(a.getKey().x - e.getKey().x) + Math.abs(a.getKey().y - e.getKey().y);
                 if (kosten <= lbg) {
-                    TelVerbindung t = new TelVerbindung(a, e, kosten);
+                    TelVerbindung t = new TelVerbindung(a.getKey(), e.getKey(), kosten);
                     telVerbindungen.add(t);
                 }
             }
@@ -131,7 +131,7 @@ public class TelNet {
         telNet.addTelKnoten(4, 7);
         telNet.addTelKnoten(7, 5);
         telNet.computeOptTelNet();
-        telNet.drawOptTelNet(10, 10);
+        telNet.drawOptTelNet(7, 7);
         System.out.println("Kosten: " + telNet.getOptTelNetKosten());
 
        /* TelNet random = new TelNet(100);
