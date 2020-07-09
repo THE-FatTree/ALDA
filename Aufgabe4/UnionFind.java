@@ -1,39 +1,31 @@
-/*
 public class UnionFind {
 
-    private final int[] p;
+    int[] p;
 
-    UnionFind(int n) {
+    public UnionFind(int n) {
         p = new int[n];
-
         for (int i = 0; i < n; i++) {
             p[i] = -1;
         }
     }
 
-    public int find(int e) {
-        while (p[e] > 0) {
+    int find(int e) {
+        while (p[e] >= 0)
             e = p[e];
-        }
         return e;
     }
 
     public void union(int s1, int s2) {
+        if (p[s1] >= 0 || p[s2] >= 0)
+            return;
+        if (s1 == s2)
+            return;
 
-        */
-/* s1 und s2 müssen Repräsentanten einer Menge sein *//*
-
-        if (p[s1] >= 0 || p[s2] >= 0) return;
-
-        */
-/* Falls s1 und s2 dieselbe Menge ist, dann mache nichts *//*
-
-        if (s1 == s2) return;
-
-        if (-p[s1] < -p[s2]) { // Höhe von s1 < Höhe von s2
+        if (-p[s1] < -p[s2])
             p[s1] = s2;
-        } else {
-            if (-p[s1] == -p[s2]) p[s1]--; // Höhe von s1 erhöht sich um 1
+        else {
+            if (-p[s1] == -p[s2])
+                p[s1]--;
             p[s2] = s1;
         }
     }
@@ -80,9 +72,7 @@ public class UnionFind {
         test.p[12] = 7;
         test.p[13] = 11;
 
-
         test.prettyPrint();
-
 
         int x = test.find(9);
         System.out.println("Element 9 hat Wurzel: " + x);
@@ -103,10 +93,6 @@ public class UnionFind {
         System.out.println();
         System.out.println("Menge an Partitionen: " + test.size());
 
-
-
     }
-
-
 }
-*/
+
