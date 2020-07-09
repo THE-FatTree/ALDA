@@ -1,4 +1,4 @@
-public class TelVerbindung implements Comparable<TelVerbindung> {
+public class TelVerbindung {
 
     int c; // Verbindungskosten
     TelKnoten u; // Anfangsknoten
@@ -17,13 +17,6 @@ public class TelVerbindung implements Comparable<TelVerbindung> {
                 ", u=" + u +
                 ", v=" + v +
                 '}';
-    }
-
-    @Override
-    public int compareTo(TelVerbindung o) {
-        if (o == null)
-            throw new IllegalArgumentException();
-        return c - o.c;
     }
 
 }

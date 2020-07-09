@@ -15,15 +15,18 @@ public class TelNet {
     // Fügt einen neuen Telefonknoten mit Koordinate (x,y) dazu.
     public boolean addTelKnoten(int x, int y) {
         TelKnoten k = new TelKnoten(x, y);
-        if (knoten.containsKey(k)) return false;
-        knoten.put(k, knoten.size());
-        return true;
+        if (knoten.containsKey(k)){
+            return false;
+        } else {
+            knoten.put(k, knoten.size());
+            return true;
+        }
     }
 
     // Berechnet ein optimales Telefonnetz als minimal aufspannenden Baum mit dem Algorithmus von Kruskal.
     public boolean computeOptTelNet() {
         UnionFind forest = new UnionFind(knoten.size());
-        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>();
+        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>(Comparator.comparing(x -> x.c));
         optTelNet = new LinkedList<>();
 
         // Füge Telefonverbindung hinzu, falls kosten <= lgb
