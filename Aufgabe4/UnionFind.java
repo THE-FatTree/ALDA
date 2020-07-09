@@ -10,21 +10,21 @@ public class UnionFind {
     }
 
     int find(int e) {
-        while (p[e] >= 0)
+        while (p[e] >= 0) // e ist keine Wurzel
             e = p[e];
         return e;
     }
 
     public void union(int s1, int s2) {
-        if (p[s1] >= 0 || p[s2] >= 0)
+        if (p[s1] >= 0 || p[s2] >= 0) // s1 und s2 müssen Repräsentanten einer Menge sein
             return;
-        if (s1 == s2)
+        if (s1 == s2) // Falls s1 und s2 dieselbe Menge ist, dann mache nichts
             return;
 
-        if (-p[s1] < -p[s2])
+        if (-p[s1] < -p[s2]) // Höhe von s1 < Höhe von s2
             p[s1] = s2;
         else {
-            if (-p[s1] == -p[s2])
+            if (-p[s1] == -p[s2]) // Höhe von s1 erhöht sich um 1
                 p[s1]--;
             p[s2] = s1;
         }
