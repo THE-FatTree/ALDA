@@ -25,9 +25,10 @@ public class TelKnoten {
 
     @Override
     public boolean equals(Object o){
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-        TelKnoten telKnoten = (TelKnoten) o;
-        return x == telKnoten.x && y == telKnoten.y;
+        if (o instanceof TelKnoten) {
+            if (this.x == ((TelKnoten) o).x && this.y == ((TelKnoten)o).y)
+                return true;
+        }
+        return false;
     }
 }

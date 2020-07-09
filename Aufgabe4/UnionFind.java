@@ -1,3 +1,4 @@
+/*
 public class UnionFind {
 
     private final int[] p;
@@ -19,10 +20,14 @@ public class UnionFind {
 
     public void union(int s1, int s2) {
 
-        /* s1 und s2 müssen Repräsentanten einer Menge sein */
+        */
+/* s1 und s2 müssen Repräsentanten einer Menge sein *//*
+
         if (p[s1] >= 0 || p[s2] >= 0) return;
 
-        /* Falls s1 und s2 dieselbe Menge ist, dann mache nichts */
+        */
+/* Falls s1 und s2 dieselbe Menge ist, dann mache nichts *//*
+
         if (s1 == s2) return;
 
         if (-p[s1] < -p[s2]) { // Höhe von s1 < Höhe von s2
@@ -104,3 +109,4 @@ public class UnionFind {
 
 
 }
+*/

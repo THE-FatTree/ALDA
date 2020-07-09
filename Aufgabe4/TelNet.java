@@ -134,7 +134,7 @@ public class TelNet {
         telNet.drawOptTelNet(7, 7);
         System.out.println("Kosten: " + telNet.getOptTelNetKosten());
 
- TelNet random = new TelNet(100);
+       /* TelNet random = new TelNet(100);
         random.generateRandomTelNet(1000,1000,1000);
 
 
@@ -142,8 +142,6 @@ public class TelNet {
 
         System.out.println("Kosten: " + random.getOptTelNetKosten());
         random.drawOptTelNet(1000, 1000);
-
-
-
+*/
     }
 }
