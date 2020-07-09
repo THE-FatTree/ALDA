@@ -3,13 +3,14 @@ import java.util.*;
 public class TelNet {
 
     int lbg;
+    int size;
     Map<TelKnoten, Integer> knoten;
     List<TelVerbindung> optTelNet;
+
 
     public TelNet(int lbg) {
         this.lbg = lbg;
         this.knoten = new HashMap<>();
-        this.optTelNet = new LinkedList<>();
     }
 
     // Fügt einen neuen Telefonknoten mit Koordinate (x,y) dazu.
@@ -18,15 +19,15 @@ public class TelNet {
         if (knoten.containsKey(k)){
             return false;
         } else {
-            knoten.put(k, knoten.size());
+            knoten.put(k, size++);
             return true;
         }
     }
 
     // Berechnet ein optimales Telefonnetz als minimal aufspannenden Baum mit dem Algorithmus von Kruskal.
     public boolean computeOptTelNet() {
-        UnionFind forest = new UnionFind(knoten.size());
-        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>(knoten.size(), Comparator.comparing(x -> x.c));
+        UnionFind forest = new UnionFind(size);
+        PriorityQueue<TelVerbindung> telVerbindungen = new PriorityQueue<>(size, Comparator.comparing(x -> x.c));
         optTelNet = new LinkedList<>();
 
         // Füge Telefonverbindung hinzu, falls kosten <= lgb
@@ -37,8 +38,7 @@ public class TelNet {
                 }
                 int kosten = Math.abs(a.getKey().x - e.getKey().x) + Math.abs(a.getKey().y - e.getKey().y);
                 if (kosten <= lbg) {
-                    TelVerbindung t = new TelVerbindung(a.getKey(), e.getKey(), kosten);
-                    telVerbindungen.add(t);
+                    telVerbindungen.add(new TelVerbindung(a.getKey(), e.getKey(), kosten));
                 }
             }
         }
@@ -108,7 +108,7 @@ public class TelNet {
 
     // Lieder die Anzahl der Knoten des Telefonnetzes zurück
     public int size(){
-        return knoten.size();
+        return size;
     }
 
     @Override
@@ -134,14 +134,15 @@ public class TelNet {
         telNet.drawOptTelNet(7, 7);
         System.out.println("Kosten: " + telNet.getOptTelNetKosten());
 
-       /* TelNet random = new TelNet(100);
+ TelNet random = new TelNet(100);
         random.generateRandomTelNet(1000,1000,1000);
 
 
         random.computeOptTelNet();
 
         System.out.println("Kosten: " + random.getOptTelNetKosten());
-        random.drawOptTelNet(1000, 1000);*/
+        random.drawOptTelNet(1000, 1000);
+
 
 
     }
