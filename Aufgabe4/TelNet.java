@@ -3,7 +3,7 @@ import java.util.*;
 public class TelNet {
 
     int lbg;
-    HashMap<TelKnoten, Integer> knoten;
+    Map<TelKnoten, Integer> knoten;
     List<TelVerbindung> optTelNet;
 
     public TelNet(int lbg) {
